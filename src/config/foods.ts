@@ -1,0 +1,168 @@
+import { Food } from '../types/inventory'
+
+export const FOODS: Food[] = [
+  // --- Basic ---
+  {
+    id: 'squirrel_biscuit',
+    name: '松鼠饼干',
+    emoji: '🍪',
+    description: '形状可爱的坚果饼干，小浣熊最爱的日常零食。',
+    rarity: 'common',
+    price: 15,
+    effects: {
+      hunger: 30,
+      mood: 5,
+    },
+    flavorText: '包装袋上印着一只和小浣熊长得有点像的松鼠，小浣熊每次都会多看两眼。',
+  },
+  {
+    id: 'banana',
+    name: '香蕉',
+    emoji: '🍌',
+    description: '新鲜的黄色香蕉，富含钾元素，甜蜜的滋味让人心情好。',
+    rarity: 'common',
+    price: 12,
+    effects: {
+      hunger: 20,
+      mood: 15,
+    },
+    flavorText: '每次剥香蕉皮的声音都能让小浣熊竖起耳朵，飞奔过来。',
+  },
+  {
+    id: 'dried_fish',
+    name: '小鱼干',
+    emoji: '🐟',
+    description: '晒干的小鱼，香气浓郁，是锻炼专注力的完美零食。',
+    rarity: 'common',
+    price: 18,
+    effects: {
+      hunger: 35,
+      focus: 10,
+    },
+    flavorText: '据说嚼小鱼干的节奏和思考的节奏很配，小浣熊对此深信不疑。',
+  },
+  // --- Mid ---
+  {
+    id: 'nutrition_cheese',
+    name: '营养奶酪',
+    emoji: '🧀',
+    description: '高蛋白配方奶酪，能有效补充体力，让精力满满。',
+    rarity: 'common',
+    price: 20,
+    effects: {
+      hunger: 30,
+      energy: 20,
+    },
+    flavorText: '每块都切得方方正正，小浣熊喜欢先舔掉外面那层再一口吃掉。',
+  },
+  {
+    id: 'matcha_cake',
+    name: '抹茶蛋糕',
+    emoji: '🍰',
+    description: '精致的抹茶风味蛋糕，清新苦香令心情大好。',
+    rarity: 'uncommon',
+    price: 35,
+    effects: {
+      mood: 30,
+      hunger: 15,
+    },
+    flavorText: '这么好看的蛋糕真的舍得吃吗？小浣熊盯着看了三分钟后决定：舍得。',
+  },
+  {
+    id: 'protein_powder',
+    name: '蛋白粉',
+    emoji: '💪',
+    description: '专业运动营养品，快速补充体力，恢复精力效果极佳。',
+    rarity: 'uncommon',
+    price: 30,
+    effects: {
+      energy: 35,
+      hunger: 15,
+    },
+    flavorText: '口感略苦，小浣熊会皱着眉头喝完，然后抖了抖毛装作没事人。',
+  },
+  // --- Premium ---
+  {
+    id: 'deep_sea_fish',
+    name: '深海鱼',
+    emoji: '🐠',
+    description: '富含DHA的深海鱼，不仅饱腹还能提升专注力和信任感。',
+    rarity: 'rare',
+    price: 60,
+    effects: {
+      hunger: 40,
+      focus: 20,
+      trust: 5,
+    },
+    flavorText: '亲手做了顿好饭递给它，小浣熊吃完后多蹭了你一下——这算是信任的证明吧。',
+  },
+  {
+    id: 'truffle',
+    name: '松露',
+    emoji: '🍄',
+    description: '顶级食材松露，激发味觉的同时点燃无限创意灵感。',
+    rarity: 'rare',
+    price: 80,
+    effects: {
+      mood: 30,
+      statBoost: { creativity: 8 },
+    },
+    flavorText: '吃完松露的小浣熊有两小时内闪闪发光的灵感，据说是真的。',
+  },
+  {
+    id: 'energy_bar',
+    name: '能量棒',
+    emoji: '⚡',
+    description: '高效能量补给棒，大量补充精力和专注力，微微填饱肚子。',
+    rarity: 'uncommon',
+    price: 28,
+    effects: {
+      energy: 45,
+      focus: 15,
+      hunger: 10,
+    },
+    flavorText: '撕开包装纸的声音像是一个宣战信号，小浣熊听到就知道：要开始认真干活了。',
+  },
+  // --- Special ---
+  {
+    id: 'rainbow_candy',
+    name: '彩虹糖',
+    emoji: '🌈',
+    description: '神秘的七彩糖果，能大幅提升心情，还有随机惊喜效果！',
+    rarity: 'rare',
+    price: 55,
+    effects: {
+      mood: 40,
+      statBoost: { creativity: 5, expression: 5 },
+    },
+    flavorText: '每颗颜色的味道都不一样，小浣熊把彩虹糖按颜色排成一列再依次吃掉。',
+  },
+  {
+    id: 'brain_drink',
+    name: '脑力饮料',
+    emoji: '🧃',
+    description: '特配益智饮料，大幅提升专注和精力，但有点抑制食欲。',
+    rarity: 'uncommon',
+    price: 32,
+    effects: {
+      focus: 35,
+      energy: 20,
+      hunger: -10,
+    },
+    flavorText: '味道有点像橙汁加墨水，但小浣熊喝完后眼神明显变亮了三个度。',
+  },
+  {
+    id: 'heart_cookie',
+    name: '心形饼干',
+    emoji: '💕',
+    description: '亲手烘焙的心形饼干，充满温情，显著提升信任感和心情。',
+    rarity: 'uncommon',
+    price: 40,
+    effects: {
+      trust: 20,
+      mood: 25,
+      hunger: 10,
+    },
+    flavorText: '饼干上有点歪斜的心形压花——小浣熊盯着看了很久，然后用爪子轻轻摸了摸。',
+  },
+]

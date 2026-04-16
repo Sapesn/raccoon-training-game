@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --raccoon-primary: #e87010;
+  --raccoon-light: #fff8f0;
+}
+
+* { -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: #f9f5f0;
+  min-height: 100vh;
+}
+
+/* Status bar colors */
+.status-hunger { @apply bg-orange-400; }
+.status-mood { @apply bg-pink-400; }
+.status-energy { @apply bg-yellow-400; }
+.status-focus { @apply bg-blue-400; }
+.status-cleanliness { @apply bg-teal-400; }
+.status-trust { @apply bg-purple-400; }
+
+/* Scrollbar hide */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
