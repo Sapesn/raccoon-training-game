@@ -8,7 +8,7 @@ import type { Raccoon, SkillKey } from '../types/raccoon'
 
 const API_BASE = import.meta.env.VITE_API_BASE as string || 'https://cld.ppapi.vip/v1'
 const API_KEY  = import.meta.env.VITE_API_KEY  as string || ''
-const MODEL    = import.meta.env.VITE_MODEL    as string || 'claude-sonnet-4-7'
+const MODEL    = import.meta.env.VITE_MODEL    as string || 'claude-sonnet-4-6'
 
 // Skill display names
 const SKILL_NAMES: Record<SkillKey, string> = {
