@@ -12,6 +12,7 @@ import type { Task } from '../../types/task'
 interface TaskCompletionModalProps {
   result: TaskResult
   task: Task
+  aiError?: string | null
   onDownloadReport: () => void
   onGoToTasks: () => void
   onGoHome: () => void
@@ -58,7 +59,7 @@ const PARTICLES = Array.from({ length: 18 }, (_, i) => ({
 }))
 
 export function TaskCompletionModal({
-  result, task, onDownloadReport, onGoToTasks, onGoHome,
+  result, task, aiError, onDownloadReport, onGoToTasks, onGoHome,
 }: TaskCompletionModalProps) {
   const [outputExpanded, setOutputExpanded] = useState(false)
   const grade = GRADE_CONFIG[result.grade] ?? GRADE_CONFIG.fail
@@ -200,6 +201,13 @@ export function TaskCompletionModal({
               </div>
             )}
           </div>
+
+          {/* AI error notice */}
+          {aiError && (
+            <div className="rounded-2xl bg-orange-50 border border-orange-100 px-4 py-3 text-xs text-orange-700 leading-relaxed">
+              <span className="font-semibold">⚡ AI执行异常（已用骰子结算）：</span>{aiError}
+            </div>
+          )}
 
           {/* AI output — collapsible */}
           {result.aiOutput && (

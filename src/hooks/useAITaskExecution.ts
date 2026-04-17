@@ -17,6 +17,7 @@ export interface AIExecState {
   streamingText: string
   isStreaming: boolean
   error: string | null
+  aiError: string | null   // actual error from the LLM call, for display
   result: TaskResult | null
   aiOutput: string | null
 }
@@ -27,6 +28,7 @@ const INITIAL_STATE: AIExecState = {
   streamingText: '',
   isStreaming: false,
   error: null,
+  aiError: null,
   result: null,
   aiOutput: null,
 }
@@ -54,6 +56,7 @@ export function useAITaskExecution(task: Task) {
 
     let aiOutput = ''
     let aiScore: number | undefined
+    let aiError: string | undefined
 
     try {
       const execResult = await executeTaskWithAI(
@@ -67,8 +70,14 @@ export function useAITaskExecution(task: Task) {
       )
       aiOutput = execResult.output
       aiScore  = execResult.aiScore
+      aiError  = execResult.error
+
+      if (aiError) {
+        console.warn('[useAITaskExecution] AI error:', aiError)
+      }
     } catch (err) {
       console.warn('[useAITaskExecution] AI call failed, falling back to dice roll', err)
+      aiError = err instanceof Error ? err.message : String(err)
     }
 
     try {
@@ -97,6 +106,7 @@ export function useAITaskExecution(task: Task) {
         streamingText: aiOutput,
         isStreaming: false,
         error: null,
+        aiError: aiError ?? null,
         result: enrichedResult,
         aiOutput: aiOutput || null,
       })

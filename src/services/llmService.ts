@@ -40,9 +40,11 @@ async function chatCompletion(
   messages: Array<{ role: string; content: string }>,
   stream = false,
   maxTokens = 1200,
+  signal?: AbortSignal,
 ): Promise<Response> {
   const res = await fetch(`${API_BASE}/chat/completions`, {
     method: 'POST',
+    signal,
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${API_KEY}`,
@@ -242,8 +244,9 @@ export async function generateTaskOptions(
 // ---------------------------------------------------------------------------
 
 export interface AIExecutionResult {
-  output: string     // work product
-  aiScore: number    // 0-100 self-evaluation
+  output: string
+  aiScore: number
+  error?: string   // set when AI call failed, so UI can show the real reason
 }
 
 /**
@@ -292,10 +295,10 @@ export async function executeTaskWithAI(
   const timeoutId = setTimeout(() => {
     timedOut = true
     controller.abort()
-  }, 45000)
+  }, 60000)
 
   try {
-    const res = await chatCompletion(messages, true, 1000)
+    const res = await chatCompletion(messages, true, 1000, controller.signal)
     const reader = res.body?.getReader()
     if (!reader) throw new Error('No response body')
 
@@ -328,12 +331,13 @@ export async function executeTaskWithAI(
       }
     }
   } catch (err) {
-    if (!timedOut) console.warn('[llmService] executeTaskWithAI error:', err)
+    const isAbort = err instanceof DOMException && err.name === 'AbortError'
+    if (!isAbort) console.warn('[llmService] executeTaskWithAI error:', err)
     if (!fullText) {
-      const fallback = timedOut
-        ? '（执行超时，使用骰子结果）'
-        : '（AI执行出错，使用骰子结果）'
-      return { output: fallback, aiScore: 50 }
+      const errMsg = timedOut
+        ? '执行超时（60s）'
+        : err instanceof Error ? err.message : String(err)
+      return { output: '（AI执行出错，使用骰子结果）', aiScore: 50, error: errMsg }
     }
   } finally {
     clearTimeout(timeoutId)

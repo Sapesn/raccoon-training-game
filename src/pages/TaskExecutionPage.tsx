@@ -364,6 +364,7 @@ export default function TaskExecutionPage() {
         <TaskCompletionModal
           result={exec.result}
           task={task}
+          aiError={exec.aiError}
           onDownloadReport={() =>
             generateTaskReport(exec.result!, {
               taskName:        task.name,
