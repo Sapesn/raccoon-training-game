@@ -7,9 +7,9 @@ import { TASKS, PERMANENT_TASKS } from '../config/tasks'
 import { ITEMS } from '../config/items'
 import { calculateSuccessRate, getTraitModifier } from '../utils/taskFormula'
 import { SuccessRatePreview } from '../components/task/SuccessRatePreview'
-import { TaskResultCard } from '../components/task/TaskResultCard'
 import { TemplateCard } from '../components/template/TemplateCard'
 import { Button } from '../components/common/Button'
+import { TaskCompletionModal } from '../components/task/TaskCompletionModal'
 import { useAITaskExecution } from '../hooks/useAITaskExecution'
 import { generateTaskReport } from '../utils/reportGenerator'
 
@@ -333,43 +333,52 @@ export default function TaskExecutionPage() {
           </motion.div>
         )}
 
-        {/* ── RESULT ── */}
-        {exec.step === 'result' && exec.result && (
+        {/* ── RESULT ── background stays as the final stream output */}
+        {exec.step === 'result' && (
           <motion.div
             key="result"
-            initial={{ opacity: 0, scale: 0.97 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             className="space-y-4"
           >
-            <TaskResultCard result={exec.result} />
-
-            <button
-              onClick={() =>
-                generateTaskReport(exec.result!, {
-                  taskName:        task.name,
-                  taskDescription: task.description,
-                  taskCategory:    task.category,
-                  taskDifficulty:  task.difficulty,
-                  raccoonName:     raccoon.name,
-                  raccoonLevel:    raccoon.level,
-                  gameDay:         store.gameDay,
-                })
-              }
-              className="w-full py-3 rounded-2xl border border-amber-300 bg-amber-50 text-amber-800 text-sm font-medium hover:bg-amber-100 transition-colors flex items-center justify-center gap-2"
-            >
-              📄 下载任务报告
-            </button>
-
-            <Button variant="secondary" fullWidth onClick={() => navigate('/tasks')}>
-              返回任务中心
-            </Button>
-            <Button variant="ghost" fullWidth onClick={() => navigate('/home')}>
-              回到主页
-            </Button>
+            <div className="bg-white rounded-2xl border border-amber-200 shadow-sm p-5 text-center">
+              <div className="text-4xl mb-3">🦝</div>
+              <div className="font-semibold text-gray-700 text-base mb-1">执行完成</div>
+              <div className="text-xs text-gray-400">{task.name}</div>
+            </div>
+            {exec.streamingText && (
+              <div className="bg-gray-50 rounded-2xl border border-gray-100 p-4">
+                <div className="text-[10px] text-gray-400 mb-2 uppercase tracking-wide">执行成果</div>
+                <div className="text-xs text-gray-700 whitespace-pre-wrap leading-relaxed font-mono max-h-64 overflow-y-auto">
+                  {exec.streamingText}
+                </div>
+              </div>
+            )}
           </motion.div>
         )}
 
       </AnimatePresence>
+
+      {/* ── COMPLETION MODAL — overlays on top when result is ready ── */}
+      {exec.step === 'result' && exec.result && (
+        <TaskCompletionModal
+          result={exec.result}
+          task={task}
+          onDownloadReport={() =>
+            generateTaskReport(exec.result!, {
+              taskName:        task.name,
+              taskDescription: task.description,
+              taskCategory:    task.category,
+              taskDifficulty:  task.difficulty,
+              raccoonName:     raccoon.name,
+              raccoonLevel:    raccoon.level,
+              gameDay:         store.gameDay,
+            })
+          }
+          onGoToTasks={() => navigate('/tasks')}
+          onGoHome={() => navigate('/home')}
+        />
+      )}
     </div>
   )
 }
