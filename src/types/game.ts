@@ -4,7 +4,7 @@ export type GamePhase =
   | 'TRAINING' | 'EXPLORING' | 'INVENTORY'
   | 'ACHIEVEMENT' | 'REWARD_CENTER' | 'EVENT_POPUP' | 'DAY_END' | 'SETTINGS'
 
-export type PopupType = 'event' | 'task_result' | 'achievement' | 'day_end' | 'confirm' | 'info'
+export type PopupType = 'event' | 'task_result' | 'achievement' | 'day_end' | 'evolution' | 'confirm' | 'info'
 export type PopupPriority = 'critical' | 'high' | 'normal' | 'low'
 
 export interface PopupItem {

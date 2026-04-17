@@ -290,6 +290,9 @@ export const createTaskSlice: StateCreator<
       }
     })
 
+    // Raccoon gains EXP from task completion (handles level-up + evolution popup)
+    if (rewards.exp > 0) get().gainExp(Math.ceil(rewards.exp * 0.6))
+
     if (template) {
       store.useTemplate(template.id, rollResult.success)
     }

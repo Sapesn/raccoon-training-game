@@ -4,10 +4,12 @@ import { EventPopup } from './EventPopup'
 import { TaskResultPopup } from './TaskResultPopup'
 import { AchievementPopup } from './AchievementPopup'
 import { DayEndPopup } from './DayEndPopup'
+import { EvolutionPopup } from './EvolutionPopup'
 import type { TaskResult } from '../../types/task'
 import type { GameEvent } from '../../types/event'
 import type { Achievement } from '../../types/achievement'
 import type { DaySummary } from '../../types/game'
+import type { EvolutionData } from './EvolutionPopup'
 
 export function PopupManager() {
   const { popupQueue, dismissPopup } = useGameStore()
@@ -46,6 +48,13 @@ export function PopupManager() {
           key={current.id}
           summary={current.data as DaySummary}
           onConfirm={dismiss}
+        />
+      )}
+      {current.type === 'evolution' && (
+        <EvolutionPopup
+          key={current.id}
+          data={current.data as EvolutionData}
+          onClose={dismiss}
         />
       )}
     </AnimatePresence>

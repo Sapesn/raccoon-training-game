@@ -14,6 +14,7 @@ import { TRAITS } from '../../config/traits'
 import { FOODS } from '../../config/foods'
 import { clampStatus, applyDecay as applyDecayUtil } from '../../utils/statusUtils'
 import type { GamePhaseSlice } from './gamePhaseSlice'
+import { getStageForLevel, EVOLUTION_THRESHOLDS } from '../../config/raccoonEvolutions'
 
 export interface RaccoonSlice {
   raccoon: Raccoon
@@ -27,6 +28,7 @@ export interface RaccoonSlice {
   groomRaccoon: () => boolean
   restRaccoon: () => boolean
   improveSkill: (skill: SkillKey, delta: number) => void
+  gainExp: (amount: number) => void
   setTrait: (traitId: string) => void
 }
 
@@ -175,11 +177,18 @@ export const createRaccoonSlice: StateCreator<
   },
 
   improveSkill: (skill, delta) => {
+    get().gainExp(Math.abs(delta) * 5)
     set((state) => {
       state.raccoon.stats[skill] = Math.max(0, state.raccoon.stats[skill] + delta)
+    })
+  },
 
-      // Raccoon exp from training
-      state.raccoon.exp += Math.abs(delta) * 5
+  gainExp: (amount) => {
+    if (amount <= 0) return
+    const prevLevel = get().raccoon.level
+
+    set((state) => {
+      state.raccoon.exp += amount
       const maxLevel = LEVEL_EXP_TABLE.length - 1
       while (
         state.raccoon.level < maxLevel &&
@@ -190,6 +199,17 @@ export const createRaccoonSlice: StateCreator<
         state.raccoon.expToNext = getRaccoonExpToNext(state.raccoon.level)
       }
     })
+
+    const newLevel = get().raccoon.level
+    if (newLevel > prevLevel && EVOLUTION_THRESHOLDS.has(newLevel)) {
+      const fromStage = getStageForLevel(prevLevel)
+      const toStage   = getStageForLevel(newLevel)
+      get().pushPopup({
+        type: 'evolution',
+        priority: 'critical',
+        data: { fromStage, toStage, newLevel },
+      })
+    }
   },
 
   setTrait: (traitId) => {

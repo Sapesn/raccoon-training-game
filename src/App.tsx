@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom'
+import { HashRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom'
 import { useGameStore } from './store/useGameStore'
 import { useGameLoop } from './hooks/useGameLoop'
 import { AppShell } from './components/layout/AppShell'
@@ -62,8 +62,8 @@ function GameApp() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <GameApp />
-    </BrowserRouter>
+    </HashRouter>
   )
 }

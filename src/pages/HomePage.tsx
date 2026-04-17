@@ -12,6 +12,7 @@ import { CoinDisplay } from '../components/common/CoinDisplay'
 import { TaskCard } from '../components/task/TaskCard'
 import { Button } from '../components/common/Button'
 import { getTodayString } from '../utils/dateUtils'
+import { getStageForLevel } from '../config/raccoonEvolutions'
 import type { CheckinResult } from '../store/slices/playerSlice'
 
 export default function HomePage() {
@@ -182,7 +183,9 @@ export default function HomePage() {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
               <span className="font-bold text-gray-800 text-base">{raccoon.name}</span>
-              <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">Lv.{raccoon.level}</span>
+              <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
+                Lv.{raccoon.level} {getStageForLevel(raccoon.level).badge ?? ''}
+              </span>
             </div>
             <RaccoonMood />
             {/* Quick status mini bars */}
@@ -203,6 +206,29 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+
+        {/* EXP / Stage strip */}
+        {(() => {
+          const stage = getStageForLevel(raccoon.level)
+          const pct = Math.min(100, Math.round((raccoon.exp / raccoon.expToNext) * 100))
+          return (
+            <div className="mt-3 pt-3 border-t border-gray-50">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-xs font-medium text-gray-500">{stage.name}</span>
+                <span className="text-xs text-gray-400">{raccoon.exp} / {raccoon.expToNext} EXP</span>
+              </div>
+              <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                <motion.div
+                  className="h-full rounded-full"
+                  style={{ background: `linear-gradient(90deg, ${stage.themeFrom}, ${stage.themeTo})` }}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${pct}%` }}
+                  transition={{ duration: 0.8, ease: 'easeOut' }}
+                />
+              </div>
+            </div>
+          )
+        })()}
 
         {/* Expand status */}
         <button
